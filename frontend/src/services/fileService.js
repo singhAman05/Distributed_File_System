@@ -1,9 +1,17 @@
 // src/services/fileService.js
 import axios from "axios";
 
+const getToken = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user?.token);
+  return user?.token;
+};
+
 export const uploadFile = async (file, onProgress, signal) => {
   const formData = new FormData();
   formData.append("file", file);
+
+  const token = getToken();
 
   try {
     const response = await axios.post(
@@ -12,6 +20,7 @@ export const uploadFile = async (file, onProgress, signal) => {
       {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Include the token in the headers
         },
         onUploadProgress: (progressEvent) => {
           const progress = Math.round(

@@ -1,6 +1,8 @@
 // src/components/Dashboard/Sidebar.js
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/auth/authSlice";
 import {
   Upload,
   Download,
@@ -12,28 +14,46 @@ import {
   ChevronRight,
   LayoutGrid,
 } from "lucide-react";
-import { Skeleton } from "components/ui/skeleton"; // Import the ShadCN Skeleton component
+import { Skeleton } from "components/ui/skeleton";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000); // Set loading for 2 seconds
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div
       className={`flex flex-col h-screen bg-white shadow-md transition-all duration-300 ${
-        isCollapsed ? "w-16" : "w-60" // Adjusted width
+        isCollapsed ? "w-16" : "w-60"
       }`}
     >
       <div className="flex items-center justify-between p-4">
@@ -71,7 +91,7 @@ const Sidebar = () => {
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <House className="inline-block" /> {!isCollapsed && "Dashboard"}
+              <House className="inline-block" /> {!isCollapsed && "Home"}
             </Link>
             <Link
               to="/upload"
@@ -81,8 +101,7 @@ const Sidebar = () => {
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <Upload className="inline-block" />{" "}
-              {!isCollapsed && "Upload Files"}
+              <Upload className="inline-block" /> {!isCollapsed && "Upload"}
             </Link>
             <Link
               to="/download"
@@ -92,8 +111,7 @@ const Sidebar = () => {
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <Download className="inline-block" />{" "}
-              {!isCollapsed && "Download Files"}
+              <Download className="inline-block" /> {!isCollapsed && "Download"}
             </Link>
             <Link
               to="/search"
@@ -103,21 +121,8 @@ const Sidebar = () => {
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <Search className="inline-block" />{" "}
-              {!isCollapsed && "Search Files"}
+              <Search className="inline-block" /> {!isCollapsed && "Search"}
             </Link>
-          </>
-        )}
-      </nav>
-
-      <div className="p-0">
-        {loading ? (
-          <>
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-          </>
-        ) : (
-          <>
             <Link
               to="/settings"
               className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
@@ -128,15 +133,15 @@ const Sidebar = () => {
             >
               <Settings className="inline-block" /> {!isCollapsed && "Settings"}
             </Link>
-            <Link
-              to="/logout"
-              className="block py-2.5 px-4 rounded-r-md transition duration-200 text-gray-700 hover:bg-gray-200"
+            <button
+              onClick={handleLogout}
+              className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
             >
               <LogOut className="inline-block" /> {!isCollapsed && "Logout"}
-            </Link>
+            </button>
           </>
         )}
-      </div>
+      </nav>
     </div>
   );
 };

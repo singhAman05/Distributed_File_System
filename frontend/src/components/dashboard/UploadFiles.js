@@ -11,7 +11,7 @@ const UploadFiles = () => {
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
-  const uploadController = useRef(new AbortController());
+  const uploadController = useRef(null); // Initialize as null
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -25,6 +25,7 @@ const UploadFiles = () => {
   const handleUploadClick = async () => {
     if (file) {
       setUploading(true);
+      uploadController.current = new AbortController(); // Initialize the AbortController before the upload
       try {
         const response = await uploadFile(
           file,
@@ -54,7 +55,7 @@ const UploadFiles = () => {
 
   const handleCancelClick = () => {
     if (uploading) {
-      uploadController.current.abort();
+      uploadController.current.abort(); // Use the AbortController to cancel the upload
       setUploading(false);
       setProgress(0);
     }

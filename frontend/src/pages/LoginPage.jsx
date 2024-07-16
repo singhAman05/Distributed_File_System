@@ -1,6 +1,8 @@
+// src/pages/LoginPage.js
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { login } from "services/authService";
+import { loginUser } from "../redux/auth/authSlice";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import logo from "assets/bgImage.jpg";
@@ -8,17 +10,17 @@ import logo from "assets/bgImage.jpg";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { status, error } = useSelector((state) => state.auth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await login(email, password);
-      localStorage.setItem("user", JSON.stringify(user));
+      await dispatch(loginUser({ email, password })).unwrap();
       navigate("/dashboard");
     } catch (err) {
-      setError("Invalid credentials");
+      console.error("Failed to login:", err);
     }
   };
 
@@ -34,7 +36,7 @@ const LoginPage = () => {
             Welcome back! Please enter your details.
           </p>
         </div>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {status === "failed" && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
@@ -58,7 +60,7 @@ const LoginPage = () => {
             type="submit"
             className="w-full bg-primary text-white p-3 rounded-md"
           >
-            Sign In
+            {status === "loading" ? "Signing In..." : "Sign In"}
           </Button>
           <div className="mt-6 text-center">
             <Link to="/forgot-password">
