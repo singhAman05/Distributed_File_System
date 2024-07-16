@@ -6,22 +6,34 @@ const fileService = require("../services/fileService");
 // controller for uploading file
 exports.uploadFile = async (req, res) => {
   try {
-    const { filename, mimeType, fileData } = req.body;
-    const fileBuffer = Buffer.from(fileData, "base64");
+    const { originalname, mimetype, buffer } = req.file;
+    const userId = req.user._id; // Get the user ID from the authenticated user
 
-    const fileMetadata = await fileService.uploadFile({
-      filename,
-      mimeType,
-      fileBuffer,
-    });
+    // Prepare the file data for the service
+    const fileData = {
+      filename: originalname,
+      mimeType: mimetype,
+      fileBuffer: buffer,
+    };
 
-    res.status(201).json({
+    // Use the fileService to upload the file
+    const fileMetadata = await fileService.uploadFile(
+      fileData,
+      userId,
+      req.signal
+    );
+
+    res.status(200).json({
       message: "File uploaded successfully",
-      file: fileMetadata,
+      fileMetadata,
     });
-  } catch (err) {
-    console.error("Error uploading file:", err);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error) {
+    console.error("Error uploading file:", error.message);
+    if (error.message === "Upload canceled") {
+      res.status(499).json({ message: "Client closed request" });
+    } else {
+      res.status(500).json({ message: "Server error" });
+    }
   }
 };
 

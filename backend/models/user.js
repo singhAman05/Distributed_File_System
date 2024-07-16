@@ -2,8 +2,18 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
+  username: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  resetPasswordToken: { type: String }, // Added for password reset functionality
+  resetPasswordExpires: { type: Date }, // Added for password reset functionality
+  recentActions: [
+    {
+      actionType: { type: String, required: true }, // 'upload' or 'download'
+      fileId: { type: mongoose.Schema.Types.ObjectId, ref: "File" },
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 // Hash password before saving

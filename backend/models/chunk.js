@@ -10,6 +10,7 @@ const chunkSchema = new Schema(
     sequence: {
       type: Number,
       required: true,
+      index: true, // Indexing for faster querying
     },
     fileId: {
       type: String, // Use String to store UUID
@@ -19,6 +20,7 @@ const chunkSchema = new Schema(
     nodeId: {
       type: String, // Include nodeId to indicate which node stores the chunk
       required: true,
+      index: true, // Indexing for faster querying
     },
   },
   { timestamps: true }

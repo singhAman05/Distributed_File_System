@@ -4,17 +4,20 @@ const authService = require("../services/authService");
 // Controller for user registration
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const { user, token } = await authService.registerUser({
+    const { email, username, password } = req.body;
+    const { user, token } = await authService.registerUserService({
       username,
       password,
+      email,
     });
     res.status(201).json({ user, token });
   } catch (err) {
     if (err.message === "Username already taken") {
       res.status(400).json({ error: err.message });
     } else {
-      res.status(500).json({ error: "Error registering user" });
+      res
+        .status(500)
+        .json({ error: "Error registering user", error_message: err });
     }
   }
 };
@@ -22,9 +25,9 @@ exports.register = async (req, res) => {
 // Controller for user login
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const { user, token } = await authService.authenticateUser({
-      username,
+    const { email, password } = req.body;
+    const { user, token } = await authService.authenticateUserService({
+      email,
       password,
     });
     res.json({ user, token });
@@ -34,5 +37,46 @@ exports.login = async (req, res) => {
     } else {
       res.status(500).json({ error: "Error logging in" });
     }
+  }
+};
+
+// Controller for password reset
+exports.sendPasswordResetEmail = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await authService.sendPasswordResetEmailService(
+      email,
+      `${process.env.FRONTEND_URL}`
+    );
+    res.status(200).send({ message: "Recovery link sent to your email" });
+  } catch (error) {
+    if (error.message === "Email not found") {
+      res.status(400).send({ message: "Email not found" });
+    } else {
+      res
+        .status(500)
+        .send({ message: "Internal Server error", error_message: error });
+    }
+  }
+};
+
+exports.verifyPasswordResetToken = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const userId = await authService.verifyPasswordResetTokenService(token);
+    res.status(200).send({ message: "Token is valid", userId });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { userId, newPassword } = req.body;
+  try {
+    await authService.resetPasswordService(userId, newPassword);
+    res.status(200).send({ message: "Password has been reset" });
+  } catch (error) {
+    res.status(400).send({ message: error.message });
   }
 };

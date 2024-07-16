@@ -10,6 +10,7 @@ const fileSchema = new Schema(
     filename: {
       type: String,
       required: true,
+      index: true, // Indexing for faster querying
     },
     size: {
       type: Number,
@@ -25,6 +26,15 @@ const fileSchema = new Schema(
         ref: "Chunk",
       },
     ],
+    uploaded_by: {
+      type: mongoose.Schema.Types.ObjectId, // Reference to the user who uploaded the file
+      ref: "User",
+      required: true,
+    },
+    download_count: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

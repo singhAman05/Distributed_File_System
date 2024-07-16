@@ -9,4 +9,11 @@ router.post("/login", authController.login);
 // Registration route
 router.post("/register", authController.register);
 
+router.post("/forgot-password", authController.sendPasswordResetEmail);
+router.get(
+  "/verify-password-reset/:token",
+  authController.verifyPasswordResetToken
+);
+router.post("/reset-password", authController.resetPassword);
+
 module.exports = router;
