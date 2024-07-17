@@ -6,6 +6,7 @@ import { loginUser } from "../redux/auth/authSlice";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import logo from "assets/bgImage.jpg";
+import QuoteCard from "utils/quoteCard";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center bg-gray-100 justify-center bg-cover bg-center relative">
       <div className="relative bg-background bg-opacity-90 shadow-md rounded-lg p-8 max-w-md w-full backdrop-blur-md">
         <div className="mb-6 text-center">
-          <img src={logo} alt="Logo" className="mx-auto h-12 w-auto" />
+          <QuoteCard />
           <h2 className="mt-6 text-3xl font-bold text-gray-900">
             Sign in to your account
           </h2>

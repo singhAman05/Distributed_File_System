@@ -9,7 +9,7 @@ const DashboardContent = () => {
   return (
     <div className="flex-1 p-10">
       <Routes>
-        <Route path="/" element={<UserDashboard />} />
+        <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/upload" element={<UploadFiles />} />
         <Route path="/download" element={<DownloadFiles />} />
         <Route path="/search" element={<SearchFiles />} />

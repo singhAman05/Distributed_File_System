@@ -5,9 +5,11 @@ import DashboardContent from "components/dashboard/DashboardContent";
 
 const DashboardPage = () => {
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex  bg-gray-100">
       <Sidebar />
-      <DashboardContent />
+      <div className="flex-grow ml-64 p-4 bg-gray-100">
+        <DashboardContent />
+      </div>
     </div>
   );
 };

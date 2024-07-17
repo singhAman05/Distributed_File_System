@@ -52,7 +52,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`flex flex-col h-screen bg-white shadow-md transition-all duration-300 ${
+      className={`flex flex-col fixed h-screen bg-background shadow-md transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-60"
       }`}
     >
@@ -73,7 +73,10 @@ const Sidebar = () => {
         </button>
       </div>
 
-      <nav className={`mt-10 flex-grow transition-opacity duration-300`}>
+      <nav
+        className={`mt-10 flex-grow flex flex-col transition-opacity duration-300`}
+        style={{ height: "calc(100vh - 4rem)", overflow: "hidden" }} // Adjusted height and overflow
+      >
         {loading ? (
           <>
             <Skeleton className="block h-10 w-full mb-2 rounded-md" />
@@ -83,62 +86,71 @@ const Sidebar = () => {
           </>
         ) : (
           <>
-            <Link
-              to="/dashboard"
-              className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                location.pathname === "/dashboard"
-                  ? "bg-secondary text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              <House className="inline-block" /> {!isCollapsed && "Home"}
-            </Link>
-            <Link
-              to="/upload"
-              className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                location.pathname === "/upload"
-                  ? "bg-secondary text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              <Upload className="inline-block" /> {!isCollapsed && "Upload"}
-            </Link>
-            <Link
-              to="/download"
-              className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                location.pathname === "/download"
-                  ? "bg-secondary text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              <Download className="inline-block" /> {!isCollapsed && "Download"}
-            </Link>
-            <Link
-              to="/search"
-              className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                location.pathname === "/search"
-                  ? "bg-secondary text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              <Search className="inline-block" /> {!isCollapsed && "Search"}
-            </Link>
-            <Link
-              to="/settings"
-              className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                location.pathname === "/settings"
-                  ? "bg-secondary text-white"
-                  : "text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              <Settings className="inline-block" /> {!isCollapsed && "Settings"}
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
-            >
-              <LogOut className="inline-block" /> {!isCollapsed && "Logout"}
-            </button>
+            <div className="flex-grow overflow-y-auto">
+              {" "}
+              {/* Added overflow for scrolling within the menu */}
+              <Link
+                to="/dashboard"
+                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+                  location.pathname === "/dashboard"
+                    ? "bg-secondary text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <House className="inline-block" /> {!isCollapsed && "Home"}
+              </Link>
+              <Link
+                to="/upload"
+                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+                  location.pathname === "/upload"
+                    ? "bg-secondary text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <Upload className="inline-block" /> {!isCollapsed && "Upload"}
+              </Link>
+              <Link
+                to="/download"
+                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+                  location.pathname === "/download"
+                    ? "bg-secondary text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <Download className="inline-block" />{" "}
+                {!isCollapsed && "Download"}
+              </Link>
+              <Link
+                to="/search"
+                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+                  location.pathname === "/search"
+                    ? "bg-secondary text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <Search className="inline-block" /> {!isCollapsed && "Search"}
+              </Link>
+            </div>
+
+            <div className="mt-auto">
+              <Link
+                to="/settings"
+                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+                  location.pathname === "/settings"
+                    ? "bg-secondary text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                <Settings className="inline-block" />{" "}
+                {!isCollapsed && "Settings"}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
+              >
+                <LogOut className="inline-block" /> {!isCollapsed && "Logout"}
+              </button>
+            </div>
           </>
         )}
       </nav>
