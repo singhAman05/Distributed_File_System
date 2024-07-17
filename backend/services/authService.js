@@ -25,7 +25,7 @@ async function registerUserService({ username, password, email }) {
 // Authenticate a user
 async function authenticateUserService({ email, password }) {
   const user = await User.findOne({ email });
-  console.log(user);
+  // console.log(user);
   if (!user || !(await user.comparePassword(password))) {
     throw new Error("Invalid credentials");
   }

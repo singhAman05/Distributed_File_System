@@ -1,15 +1,35 @@
 // controllers/authController.js
 const authService = require("../services/authService");
+const Profile = require("../models/profile");
 
 // Controller for user registration
 exports.register = async (req, res) => {
   try {
     const { email, username, password } = req.body;
+
+    // Register the user
     const { user, token } = await authService.registerUserService({
       username,
       password,
       email,
     });
+
+    // Create a new profile for the user
+    const profile = new Profile({
+      user: user._id, // Link the profile to the user's ID
+      dates: [
+        {
+          date: new Date(), // Initialize with today's date
+          uploadCount: 0, // Start with zero upload count
+          downloadCount: 0, // Start with zero download count
+          recentActions: [], // Start with an empty actions array
+        },
+      ],
+    });
+
+    // Save the profile to the database
+    await profile.save();
+
     res.status(201).json({ user, token });
   } catch (err) {
     if (err.message === "Username already taken") {

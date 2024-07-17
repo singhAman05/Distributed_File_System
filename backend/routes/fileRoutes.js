@@ -33,5 +33,4 @@ router.post(
 router.get("/download/:id", authMiddleware, fileController.downloadFile);
 router.get("/listFiles", authMiddleware, fileController.listFiles);
 router.delete("/delete/:id", authMiddleware, fileController.deleteFile); // New route
-
 module.exports = router;

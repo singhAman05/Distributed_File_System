@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
     },
   ],
+  uploads: { type: Number, default: 0 },
+  downloads: { type: Number, default: 0 },
 });
 
 // Hash password before saving

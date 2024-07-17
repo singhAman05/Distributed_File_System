@@ -25,11 +25,15 @@ app.use(httpLogger); // HTTP logging
 const fileRoutes = require("./routes/fileRoutes");
 const authRoutes = require("./routes/authRoutes");
 const nodeRoutes = require("./routes/nodeRoutes");
+const userRoutes = require("./routes/userRoute");
+const profileRoutes = require("./routes/profileRoutes");
 const errorHandler = require("./utils/errorHandler");
 
 app.use(errorHandler);
 app.use("/api/files/v1", fileRoutes);
 app.use("/api/auth/v1", authRoutes);
+app.use("/api/user/v1", userRoutes);
+app.use("/api/profile/v1", profileRoutes);
 app.use("/api/nodes/v1", nodeRoutes);
 
 // Health check endpoint to be added to nodes to check there status

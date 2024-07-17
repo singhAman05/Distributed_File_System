@@ -1,6 +1,7 @@
 // controllers/fileController.js
 
 const File = require("../models/file");
+const Profile = require("../models/profile");
 const fileService = require("../services/fileService");
 
 // controller for uploading file
@@ -23,6 +24,42 @@ exports.uploadFile = async (req, res) => {
       req.signal
     );
 
+    const profile = await Profile.findOne({ user: userId });
+
+    const today = new Date().toISOString().split("T")[0];
+    console.log(today);
+    const todayData = profile.dates.find(
+      (data) => data.date.toISOString().split("T")[0] === today
+    );
+    console.log(todayData);
+
+    if (todayData) {
+      todayData.uploadCount += 1;
+      todayData.recentActions.push({
+        actionType: "upload",
+        fileName: req.file.originalname,
+        fileType: req.file.mimetype,
+        size: req.file.size,
+      });
+    } else {
+      profile.dates.push({
+        date: new Date(),
+        uploadCount: 1,
+        downloadCount: 0,
+        recentActions: [
+          {
+            actionType: "upload",
+            fileName: req.file.originalname,
+            fileType: req.file.mimetype,
+            size: req.file.size,
+          },
+        ],
+      });
+    }
+
+    // Save the updated profile
+    await profile.save();
+    res.status(200);
     res.status(200).json({
       message: "File uploaded successfully",
       fileMetadata,
@@ -42,6 +79,51 @@ exports.downloadFile = async (req, res) => {
   try {
     const fileId = req.params.id;
     const file = await fileService.downloadFile(fileId);
+    const userId = req.user._id;
+
+    // Increment download count
+    await File.findByIdAndUpdate(fileId, {
+      $inc: { download_count: 1 },
+    });
+
+    const profile = await Profile.findOne({ user: userId });
+
+    const today = new Date().toISOString().split("T")[0];
+    console.log(today);
+    const todayData = profile.dates.find(
+      (data) => data.date.toISOString().split("T")[0] === today
+    );
+    console.log(todayData);
+
+    // Calculate the file size in bytes
+    const fileSize = file.fileBuffer.length;
+
+    if (todayData) {
+      todayData.downloadCount += 1;
+      todayData.recentActions.push({
+        actionType: "download",
+        fileName: file.filename,
+        fileType: file.mimeType,
+        size: fileSize,
+      });
+    } else {
+      profile.dates.push({
+        date: new Date(),
+        uploadCount: 0,
+        downloadCount: 1,
+        recentActions: [
+          {
+            actionType: "download",
+            fileName: file.filename,
+            fileType: file.mimeType,
+            size: fileSize,
+          },
+        ],
+      });
+    }
+
+    // Save the updated profile
+    await profile.save();
 
     res.setHeader(
       "Content-Disposition",
@@ -58,11 +140,14 @@ exports.downloadFile = async (req, res) => {
 // controller for listing file
 exports.listFiles = async (req, res) => {
   try {
-    const files = await File.find({});
+    const files = await File.find()
+      .populate("uploaded_by", "username")
+      .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+      .limit(20); // Limit to 20 files
     res.status(200).json(files);
-  } catch (err) {
-    console.error("Error listing files:", err);
-    res.status(500).json({ error: "Internal server error" });
+  } catch (error) {
+    console.error("Error listing files:", error.message);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

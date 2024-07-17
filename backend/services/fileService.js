@@ -98,13 +98,6 @@ async function downloadFile(fileId) {
   // Reassemble the file
   let fileBuffer = Buffer.concat(chunks.map((chunk) => chunk.data));
 
-  // Optional: Save the file to a local path for testing purposes
-  // const localFilePath = path.join(
-  //   __dirname,
-  //   `../downloads/${fileMetadata.filename}`
-  // );
-  // fs.writeFileSync(localFilePath, fileBuffer);
-
   return {
     filename: fileMetadata.filename,
     mimeType: fileMetadata.mimeType,
