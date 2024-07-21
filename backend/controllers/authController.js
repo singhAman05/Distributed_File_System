@@ -52,6 +52,7 @@ exports.login = async (req, res) => {
     });
     res.json({ user, token });
   } catch (err) {
+    console.log(err.message);
     if (err.message === "Invalid credentials") {
       res.status(401).json({ error: err.message });
     } else {
