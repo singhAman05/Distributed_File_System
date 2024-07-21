@@ -10,7 +10,7 @@ import {
   Braces,
 } from "lucide-react";
 
-const FileIcon = ({ mimeType }) => {
+const FileIcon = ({ mimeType = "" }) => {
   if (mimeType.startsWith("image/")) {
     return <Image className="text-2xl" />;
   } else if (mimeType === "application/pdf") {

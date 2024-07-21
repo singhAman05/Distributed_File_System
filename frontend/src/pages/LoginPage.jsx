@@ -5,7 +5,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../redux/auth/authSlice";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
-import logo from "assets/bgImage.jpg";
 import QuoteCard from "utils/quoteCard";
 
 const LoginPage = () => {

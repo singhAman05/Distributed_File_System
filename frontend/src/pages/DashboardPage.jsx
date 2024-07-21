@@ -5,9 +5,9 @@ import DashboardContent from "components/dashboard/DashboardContent";
 
 const DashboardPage = () => {
   return (
-    <div className="flex  bg-gray-100">
+    <div className="flex">
       <Sidebar />
-      <div className="flex-grow ml-64 p-4 bg-gray-100">
+      <div className="flex-grow ml-64 p-4">
         <DashboardContent />
       </div>
     </div>

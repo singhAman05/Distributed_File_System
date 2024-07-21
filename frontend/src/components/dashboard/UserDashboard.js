@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FileIcon from "utils/fileIcon";
-import { CircularProgressbar } from "react-circular-progressbar";
+import SystemStatus from "utils/systemStatus";
 import "react-circular-progressbar/dist/styles.css";
 import { getProfile } from "services/profileService";
 import { Line } from "react-chartjs-2";
@@ -58,14 +58,14 @@ const UserDashboard = () => {
         {
           label: "Uploads",
           data: uploadCounts,
-          borderColor: "rgba(70, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "rgb(255, 163, 0)",
+          backgroundColor: "#F5F5F5",
         },
         {
           label: "Downloads",
           data: downloadCounts,
-          borderColor: "rgba(153, 102, 255, 1)",
-          backgroundColor: "rgba(153, 102, 255, 0.2)",
+          borderColor: "rgb(155, 25, 245)",
+          backgroundColor: "#F5F5F5",
         },
       ],
     };
@@ -83,51 +83,100 @@ const UserDashboard = () => {
       <h1 className="text-2xl font-bold">Welcome {profile.user?.username}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* UserStatus Section */}
+        {/* Left Column: UserStatus and SystemStatus */}
         <div className="col-span-1 space-y-4">
-          <div className="bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg flex flex-col items-center">
-            <h2 className="text-xl">User Stats</h2>
-            <div className="flex space-x-4 mt-4">
-              <div className="w-24 h-24">
-                <CircularProgressbar
-                  value={
-                    profile.dates.reduce(
-                      (acc, date) => acc + date.uploadCount,
-                      0
-                    ) || 0
-                  }
-                  text={`U: ${
-                    profile.dates.reduce(
-                      (acc, date) => acc + date.uploadCount,
-                      0
-                    ) || 0
-                  }`}
-                />
+          {/* UserStatus Section */}
+          <div className="bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
+            <h2 className="text-xl font-semibold mb-2">Your Stats</h2>
+            <hr className="border-gray-300 my-2" />
+            <div className="flex flex-col space-y-4">
+              {/* Downloads Section */}
+              <div className="flex justify-between items-center">
+                <div className="text-lg font-medium">Downloads</div>
+                <div className="text-lg font-medium">
+                  {profile.dates.reduce(
+                    (acc, date) => acc + date.downloadCount,
+                    0
+                  ) || 0}
+                </div>
               </div>
-              <div className="w-24 h-24">
-                <CircularProgressbar
-                  value={
-                    profile.dates.reduce(
+              <div className="w-full bg-gray-300 rounded-full h-4">
+                <div
+                  className="bg-[#9b19f5] h-4 rounded-full animate-pulse"
+                  style={{
+                    width: `${Math.min(
+                      (profile.dates.reduce(
+                        (acc, date) => acc + date.downloadCount,
+                        0
+                      ) /
+                        10) *
+                        100,
+                      100
+                    )}%`,
+                  }}
+                ></div>
+              </div>
+
+              {/* Uploads Section */}
+              <div className="flex justify-between items-center">
+                <div className="text-lg font-medium">Uploads</div>
+                <div className="text-lg font-medium">
+                  {profile.dates.reduce(
+                    (acc, date) => acc + date.uploadCount,
+                    0
+                  ) || 0}
+                </div>
+              </div>
+              <div className="w-full bg-gray-300 rounded-full h-4">
+                <div
+                  className="bg-[#ffa300] h-4 rounded-full animate-pulse"
+                  style={{
+                    width: `${Math.min(
+                      (profile.dates.reduce(
+                        (acc, date) => acc + date.uploadCount,
+                        0
+                      ) /
+                        10) *
+                        100,
+                      100
+                    )}%`,
+                  }}
+                ></div>
+              </div>
+
+              {/* Total Downloads and Uploads */}
+              <div className="mt-4">
+                <div className="flex justify-between">
+                  <span className="font-medium">Total Downloads:</span>
+                  <span>
+                    {profile.dates.reduce(
                       (acc, date) => acc + date.downloadCount,
                       0
-                    ) || 0
-                  }
-                  text={`D: ${
-                    profile.dates.reduce(
-                      (acc, date) => acc + date.downloadCount,
+                    ) || 0}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-medium">Total Uploads:</span>
+                  <span>
+                    {profile.dates.reduce(
+                      (acc, date) => acc + date.uploadCount,
                       0
-                    ) || 0
-                  }`}
-                />
+                    ) || 0}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* SystemStatus Section */}
+          <SystemStatus />
         </div>
 
-        {/* Chart Sections */}
+        {/* Right Column: Chart Section */}
         <div className="col-span-2 bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
-          <h2 className="text-xl">Upload/Download Activity</h2>
-          <div className="h-64">
+          <h2 className="text-xl font-semibold">Upload/Download Activity</h2>
+          <hr className="border-gray-300 my-2" />
+          <div className="h-64 w-full">
             {profile.dates.length ? (
               <Line data={chartData} />
             ) : (
@@ -144,8 +193,10 @@ const UserDashboard = () => {
           <p>Do some actions, bro, to see them here :)</p>
         ) : (
           <div className="space-y-4">
-            {profile.dates.flatMap((dateData) =>
-              dateData.recentActions.map((action, index) => (
+            {profile.dates
+              .flatMap((dateData) => dateData.recentActions)
+              .reverse() // Reverse the actions array
+              .map((action, index) => (
                 <div
                   key={index}
                   className="flex flex-col sm:flex-row items-center p-4 bg-background hover:shadow-lg duration-200 shadow-md rounded-md"
@@ -170,8 +221,7 @@ const UserDashboard = () => {
                     </div>
                   </div>
                 </div>
-              ))
-            )}
+              ))}
           </div>
         )}
       </div>
