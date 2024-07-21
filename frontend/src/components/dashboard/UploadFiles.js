@@ -34,16 +34,8 @@ const UploadFiles = () => {
         );
         console.log("Upload complete:", response);
       } catch (error) {
-        if (error.name === "AbortError") {
-          console.log("Upload canceled");
-        } else {
-          console.error("Error:", error);
-          if (error.response && error.response.status === 413) {
-            setError("File size exceeds the maximum limit of 100MB");
-          } else {
-            setError(error.message);
-          }
-        }
+        console.error("Error:", error.message);
+        setError(error.message);
       } finally {
         setUploading(false);
       }
