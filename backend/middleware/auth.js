@@ -5,7 +5,7 @@ const { verifyToken } = require("../config/auth");
 
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
-  console.log(token);
+  // console.log(token);
   if (!token) {
     return res.status(401).send({ error: "No token provided." });
   }

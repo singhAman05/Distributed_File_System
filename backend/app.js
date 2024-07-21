@@ -1,7 +1,7 @@
 // app.js
 require("newrelic");
 const express = require("express");
-const scheduler = require("./scheduler");
+require("./scheduler");
 const dotenv = require("dotenv");
 const connectDB = require("./config/database");
 const { httpLogger, errorLogger } = require("./config/logging");
@@ -27,6 +27,7 @@ const authRoutes = require("./routes/authRoutes");
 const nodeRoutes = require("./routes/nodeRoutes");
 const userRoutes = require("./routes/userRoute");
 const profileRoutes = require("./routes/profileRoutes");
+const systemRoutes = require("./routes/systemRoutes");
 const errorHandler = require("./utils/errorHandler");
 
 app.use(errorHandler);
@@ -35,12 +36,7 @@ app.use("/api/auth/v1", authRoutes);
 app.use("/api/user/v1", userRoutes);
 app.use("/api/profile/v1", profileRoutes);
 app.use("/api/nodes/v1", nodeRoutes);
-
-// Health check endpoint to be added to nodes to check there status
-// app.get("/health", (req, res) => {
-//   // You can add more checks here (e.g., database connectivity, load status)
-//   res.status(200).json({ status: "UP" });
-// });
+app.use("/api/system/v1", systemRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;

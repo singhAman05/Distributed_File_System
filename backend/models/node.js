@@ -22,6 +22,11 @@ const nodeSchema = new Schema(
       type: Number,
       required: true,
     },
+    isHealthy: {
+      type: Number,
+      required: true,
+      default: 1, // 1 means healthy, 0 means unhealthy
+    },
   },
   { timestamps: true }
 );
