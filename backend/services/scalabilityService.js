@@ -1,9 +1,13 @@
-// services/scalabilityService.js (continued)
+// services/scalabilityService.js
 const Chunk = require("../models/chunk");
 const loadBalancer = require("./loadBalancer");
 const Node = require("../models/node");
+const { parseConnectionString } = require("../utils/parseConnectionString");
 
-async function addNode(nodeData) {
+async function addNode(connectionString) {
+  // Parse the connection string to get node details
+  const nodeData = parseConnectionString(connectionString);
+
   // Validate node data (e.g., check if node with the same ID already exists)
   if (await Node.findOne({ id: nodeData.id })) {
     throw new Error("Node already exists");
@@ -19,7 +23,6 @@ async function addNode(nodeData) {
   return newNode;
 }
 
-// Remove a node from the system
 async function removeNode(nodeId) {
   try {
     // Remove node from the load balancer

@@ -5,7 +5,8 @@ const { addNode, removeNode } = require("../services/scalabilityService");
 
 router.post("/joining", async (req, res) => {
   try {
-    const node = await addNode(req.body);
+    const connectionString = req.body.connectionString;
+    const node = await addNode(connectionString);
     res.status(201).json(node);
   } catch (error) {
     res.status(500).json({ error: error.message });

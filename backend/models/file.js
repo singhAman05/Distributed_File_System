@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const fileSchema = new Schema(
   {
     _id: {
-      type: String, // Change from ObjectId to String to store UUID
+      type: String, // Use String to store UUID
       required: true,
     },
     filename: {
@@ -22,8 +22,9 @@ const fileSchema = new Schema(
     },
     chunks: [
       {
-        type: mongoose.Schema.Types.ObjectId, // Referencing chunks by ObjectId
-        ref: "Chunk",
+        chunkId: { type: String, required: true },
+        nodeId: { type: String, required: true },
+        replicaNodeId: { type: String, required: true },
       },
     ],
     uploaded_by: {

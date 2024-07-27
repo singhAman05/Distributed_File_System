@@ -27,6 +27,10 @@ const nodeSchema = new Schema(
       required: true,
       default: 1, // 1 means healthy, 0 means unhealthy
     },
+    connectionString: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

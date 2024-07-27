@@ -7,7 +7,7 @@ const fileService = require("../services/fileService");
 // controller for uploading file
 exports.uploadFile = async (req, res) => {
   try {
-    const { originalname, mimetype, buffer } = req.file;
+    const { originalname, mimetype, buffer, size } = req.file;
     const userId = req.user._id; // Get the user ID from the authenticated user
 
     // Prepare the file data for the service
@@ -24,42 +24,46 @@ exports.uploadFile = async (req, res) => {
       req.signal
     );
 
+    // Update the user's profile with upload information
     const profile = await Profile.findOne({ user: userId });
 
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
     const today = new Date().toISOString().split("T")[0];
-    console.log(today);
-    const todayData = profile.dates.find(
+    let todayData = profile.dates.find(
       (data) => data.date.toISOString().split("T")[0] === today
     );
-    console.log(todayData);
 
     if (todayData) {
       todayData.uploadCount += 1;
       todayData.recentActions.push({
         actionType: "upload",
-        fileName: req.file.originalname,
-        fileType: req.file.mimetype,
-        size: req.file.size,
+        fileName: originalname,
+        fileType: mimetype,
+        size: size,
       });
     } else {
-      profile.dates.push({
+      todayData = {
         date: new Date(),
         uploadCount: 1,
         downloadCount: 0,
         recentActions: [
           {
             actionType: "upload",
-            fileName: req.file.originalname,
-            fileType: req.file.mimetype,
-            size: req.file.size,
+            fileName: originalname,
+            fileType: mimetype,
+            size: size,
           },
         ],
-      });
+      };
+      profile.dates.push(todayData);
     }
 
     // Save the updated profile
     await profile.save();
-    res.status(200);
+    console.log("file saved successfully");
     res.status(200).json({
       message: "File uploaded successfully",
       fileMetadata,
@@ -89,11 +93,9 @@ exports.downloadFile = async (req, res) => {
     const profile = await Profile.findOne({ user: userId });
 
     const today = new Date().toISOString().split("T")[0];
-    console.log(today);
     const todayData = profile.dates.find(
       (data) => data.date.toISOString().split("T")[0] === today
     );
-    console.log(todayData);
 
     // Calculate the file size in bytes
     const fileSize = file.fileBuffer.length;

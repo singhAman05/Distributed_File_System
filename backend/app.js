@@ -20,6 +20,7 @@ connectDB();
 app.use(express.json()); // Body parser
 app.use(cors()); // Enable CORS
 app.use(httpLogger); // HTTP logging
+app.use(errorLogger); // Error logging
 
 // Routes
 const fileRoutes = require("./routes/fileRoutes");

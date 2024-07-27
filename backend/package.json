@@ -15,7 +15,9 @@
     "newrelic": "^11.22.0",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
+    "p-limit": "^6.1.0",
     "rotating-file-stream": "^3.2.3",
+    "url": "^0.11.3",
     "uuid": "^10.0.0",
     "winston": "^3.13.0"
   },
