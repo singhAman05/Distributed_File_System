@@ -29,6 +29,7 @@ const nodeRoutes = require("./routes/nodeRoutes");
 const userRoutes = require("./routes/userRoute");
 const profileRoutes = require("./routes/profileRoutes");
 const systemRoutes = require("./routes/systemRoutes");
+const searchRoutes = require("./routes/searchRoutes");
 const errorHandler = require("./utils/errorHandler");
 
 app.use(errorHandler);
@@ -38,6 +39,7 @@ app.use("/api/user/v1", userRoutes);
 app.use("/api/profile/v1", profileRoutes);
 app.use("/api/nodes/v1", nodeRoutes);
 app.use("/api/system/v1", systemRoutes);
+app.use("/api/search/v1", searchRoutes);
 
 // Server Test
 app.get("/", (req, res) => {
