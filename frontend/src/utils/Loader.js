@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 
 const Loader = ({ size = 24, color = "text-blue-500" }) => {
   return (
-    <div className={`flex justify-center items-center ${color}`}>
+    <div className="flex justify-center items-center">
       <svg
-        className={`animate-spin h-${size} w-${size}`}
+        className={`animate-spin h-${size} w-${size} ${color}`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

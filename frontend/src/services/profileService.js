@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/profile/v1";
+import { BackendUrl, ProfileRoute } from "utils/config";
+const API_URL = `${BackendUrl}/${ProfileRoute}`;
 
 export const getProfile = async () => {
   const token = JSON.parse(localStorage.getItem("user"))?.token;

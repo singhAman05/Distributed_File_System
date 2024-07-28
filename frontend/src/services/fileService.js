@@ -1,6 +1,9 @@
 // src/services/fileService.js
 import axios from "axios";
-import { handleError } from "utils/responseHandler";
+import { handleResponse } from "utils/responseHandler";
+import { BackendUrl, FileRoute } from "utils/config";
+
+const API_URL = `${BackendUrl}/${FileRoute}`;
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -14,41 +17,34 @@ export const uploadFile = async (file, onProgress, signal) => {
   const token = getToken();
 
   try {
-    const response = await axios.post(
-      "http://localhost:5000/api/files/v1/upload",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Include the token in the headers
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          onProgress(progress);
-        },
-        signal: signal, // Pass the abort signal here
-      }
-    );
+    const response = await axios.post(`${API_URL}/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Include the token in the headers
+      },
+      onUploadProgress: (progressEvent) => {
+        const progress = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        onProgress(progress);
+      },
+      signal: signal, // Pass the abort signal here
+    });
     return response.data;
   } catch (error) {
     console.log(error);
-    const handledError = handleError(error);
+    const handledError = handleResponse(error);
     throw handledError; // Throw the handled error
   }
 };
 
 export const listFiles = async () => {
   const token = getToken();
-  const response = await axios.get(
-    "http://localhost:5000/api/files/v1/listFiles",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axios.get(`${API_URL}/listFiles`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
@@ -56,15 +52,12 @@ export const downloadFile = async (fileId) => {
   try {
     const token = getToken();
     console.log(token);
-    const response = await axios.get(
-      `http://localhost:5000/api/files/v1/download/${fileId}`,
-      {
-        responseType: "blob", // Important for file download
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${API_URL}/download/${fileId}`, {
+      responseType: "blob", // Important for file download
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log(response);
     // Create a URL for the downloaded file
     const url = window.URL.createObjectURL(

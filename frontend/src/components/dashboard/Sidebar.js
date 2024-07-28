@@ -1,5 +1,4 @@
-// src/components/Dashboard/Sidebar.js
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/auth/authSlice";
@@ -12,33 +11,27 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
+  LayoutDashboard,
 } from "lucide-react";
-import { Skeleton } from "components/ui/skeleton";
+import { toast } from "sonner";
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [loading, setLoading] = useState(true);
+const Sidebar = ({ isCollapsed, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State to control submenu visibility
 
   const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+    toast.loading("Logging you out...");
+    setTimeout(() => {
+      dispatch(logoutUser());
+      toast.dismiss(); // Dismiss the loading toast
+      toast.success("Logged out successfully");
+      navigate("/login");
+    }, 2000); // 3 seconds delay
   };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -49,6 +42,14 @@ const Sidebar = () => {
   if (!user) {
     return null;
   }
+
+  const handleMouseEnter = () => {
+    setIsSettingsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsSettingsOpen(false);
+  };
 
   return (
     <div
@@ -61,7 +62,7 @@ const Sidebar = () => {
           <div className="text-center font-bold text-xl">DFS Dashboard</div>
         ) : (
           <div>
-            <LayoutGrid className="text-gray-700" />
+            <LayoutDashboard className="text-gray-700" />
           </div>
         )}
         <button onClick={toggleSidebar} className="focus:outline-none">
@@ -77,82 +78,135 @@ const Sidebar = () => {
         className={`mt-10 flex-grow flex flex-col transition-opacity duration-300`}
         style={{ height: "calc(100vh - 4rem)", overflow: "hidden" }} // Adjusted height and overflow
       >
-        {loading ? (
-          <>
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-            <Skeleton className="block h-10 w-full mb-2 rounded-md" />
-          </>
-        ) : (
-          <>
-            <div className="flex-grow overflow-y-auto">
-              {" "}
-              {/* Added overflow for scrolling within the menu */}
-              <Link
-                to="/dashboard"
-                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                  location.pathname === "/dashboard"
-                    ? "bg-secondary text-white"
-                    : "text-gray-700 hover:bg-gray-200"
+        <div className="flex-grow overflow-y-auto">
+          <Link
+            to="/dashboard"
+            className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+              location.pathname === "/dashboard"
+                ? "bg-secondary text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <House className="inline-block" />
+            <span
+              className={`transition-opacity duration-300 delay-150 ${
+                isCollapsed ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isCollapsed && " Home"}
+            </span>
+          </Link>
+          <Link
+            to="/upload"
+            className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+              location.pathname === "/upload"
+                ? "bg-secondary text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <Upload className="inline-block" />
+            <span
+              className={`transition-opacity duration-300 delay-150 ${
+                isCollapsed ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isCollapsed && " Upload"}
+            </span>
+          </Link>
+          <Link
+            to="/download"
+            className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+              location.pathname === "/download"
+                ? "bg-secondary text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <Download className="inline-block" />
+            <span
+              className={`transition-opacity duration-300 delay-150 ${
+                isCollapsed ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isCollapsed && " Download"}
+            </span>
+          </Link>
+          <Link
+            to="/search"
+            className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
+              location.pathname === "/search"
+                ? "bg-secondary text-white"
+                : "text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <Search className="inline-block" />
+            <span
+              className={`transition-opacity duration-300 delay-150 ${
+                isCollapsed ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isCollapsed && " Search"}
+            </span>
+          </Link>
+        </div>
+
+        <div className="mt-auto">
+          <div
+            className="relative"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div
+              className={`block py-2.5 px-4 rounded-r-md w-full text-left transition duration-200 ${
+                location.pathname === "/settings"
+                  ? "bg-secondary text-white"
+                  : "text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              <Settings className="inline-block" />
+              <span
+                className={`transition-opacity duration-300 delay-150 ${
+                  isCollapsed ? "opacity-0" : "opacity-100"
                 }`}
               >
-                <House className="inline-block" /> {!isCollapsed && "Home"}
-              </Link>
-              <Link
-                to="/upload"
-                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                  location.pathname === "/upload"
-                    ? "bg-secondary text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <Upload className="inline-block" /> {!isCollapsed && "Upload"}
-              </Link>
-              <Link
-                to="/download"
-                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                  location.pathname === "/download"
-                    ? "bg-secondary text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <Download className="inline-block" />{" "}
-                {!isCollapsed && "Download"}
-              </Link>
-              <Link
-                to="/search"
-                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                  location.pathname === "/search"
-                    ? "bg-secondary text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <Search className="inline-block" /> {!isCollapsed && "Search"}
-              </Link>
+                {!isCollapsed && " Settings"}
+              </span>
             </div>
 
-            <div className="mt-auto">
-              <Link
-                to="/settings"
-                className={`block py-2.5 px-4 rounded-r-md transition duration-200 ${
-                  location.pathname === "/settings"
-                    ? "bg-secondary text-white"
-                    : "text-gray-700 hover:bg-gray-200"
-                }`}
+            {isSettingsOpen && (
+              <div
+                className={`absolute left-full top-0 z-10 bg-background shadow-md rounded-md mt-2 ${
+                  isCollapsed ? "w-0" : "w-48"
+                } transition-width duration-300`}
               >
-                <Settings className="inline-block" />{" "}
-                {!isCollapsed && "Settings"}
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
-              >
-                <LogOut className="inline-block" /> {!isCollapsed && "Logout"}
-              </button>
-            </div>
-          </>
-        )}
+                <Link
+                  to="/contact"
+                  className="block py-2.5 px-4 text-gray-700 hover:bg-gray-200 rounded-md transition duration-200"
+                >
+                  Contact Us
+                </Link>
+                <Link
+                  to="/profile"
+                  className="block py-2.5 px-4 text-gray-700 hover:bg-gray-200 rounded-md transition duration-200"
+                >
+                  Profile
+                </Link>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleLogout}
+            className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
+          >
+            <LogOut className="inline-block" />
+            <span
+              className={`transition-opacity duration-300 delay-150 ${
+                isCollapsed ? "opacity-0" : "opacity-100"
+              }`}
+            >
+              {!isCollapsed && " Logout"}
+            </span>
+          </button>
+        </div>
       </nav>
     </div>
   );

@@ -3,31 +3,12 @@ import FileIcon from "utils/fileIcon";
 import SystemStatus from "utils/systemStatus";
 import "react-circular-progressbar/dist/styles.css";
 import { getProfile } from "services/profileService";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import ChartComponent from "utils/generateChart";
 
 const UserDashboard = () => {
-  const [profile, setProfile] = useState(null); // Changed initial state to null
+  const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -40,57 +21,32 @@ const UserDashboard = () => {
       }
     };
 
+    const storedUser = JSON.parse(localStorage.getItem("user")).user;
+    console.log(storedUser);
+    if (storedUser && storedUser.username) {
+      setUsername(storedUser.username);
+    }
+
     fetchProfile();
   }, []);
-
-  const generateChartData = (profile) => {
-    const labels = profile.dates.map((dateData) =>
-      new Date(dateData.date).toLocaleDateString()
-    );
-    const uploadCounts = profile.dates.map((dateData) => dateData.uploadCount);
-    const downloadCounts = profile.dates.map(
-      (dateData) => dateData.downloadCount
-    );
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: "Uploads",
-          data: uploadCounts,
-          borderColor: "rgb(255, 163, 0)",
-          backgroundColor: "#F5F5F5",
-        },
-        {
-          label: "Downloads",
-          data: downloadCounts,
-          borderColor: "rgb(155, 25, 245)",
-          backgroundColor: "#F5F5F5",
-        },
-      ],
-    };
-  };
 
   if (profile === null) {
     return <div>Loading...</div>;
   }
 
-  const chartData = generateChartData(profile);
-
   return (
     <div className="p-4 space-y-6">
       {error && <p className="text-red-500">{error}</p>}
-      <h1 className="text-2xl font-bold">Welcome {profile.user?.username}</h1>
+      <h1 className="text-2xl font-medium">
+        Welcome <span className="font-semibold text-3xl">{username}</span>
+      </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Left Column: UserStatus and SystemStatus */}
         <div className="col-span-1 space-y-4">
-          {/* UserStatus Section */}
           <div className="bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
             <h2 className="text-xl font-semibold mb-2">Your Stats</h2>
             <hr className="border-gray-300 my-2" />
             <div className="flex flex-col space-y-4">
-              {/* Downloads Section */}
               <div className="flex justify-between items-center">
                 <div className="text-lg font-medium">Downloads</div>
                 <div className="text-lg font-medium">
@@ -117,7 +73,6 @@ const UserDashboard = () => {
                 ></div>
               </div>
 
-              {/* Uploads Section */}
               <div className="flex justify-between items-center">
                 <div className="text-lg font-medium">Uploads</div>
                 <div className="text-lg font-medium">
@@ -144,7 +99,6 @@ const UserDashboard = () => {
                 ></div>
               </div>
 
-              {/* Total Downloads and Uploads */}
               <div className="mt-4">
                 <div className="flex justify-between">
                   <span className="font-medium">Total Downloads:</span>
@@ -168,25 +122,16 @@ const UserDashboard = () => {
             </div>
           </div>
 
-          {/* SystemStatus Section */}
           <SystemStatus />
         </div>
 
-        {/* Right Column: Chart Section */}
         <div className="col-span-2 bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
           <h2 className="text-xl font-semibold">Upload/Download Activity</h2>
           <hr className="border-gray-300 my-2" />
-          <div className="h-64 w-full">
-            {profile.dates.length ? (
-              <Line data={chartData} />
-            ) : (
-              <p>Loading chart...</p>
-            )}
-          </div>
+          <ChartComponent profile={profile} />
         </div>
       </div>
 
-      {/* Recent Actions */}
       <div className="bg-transparent p-4">
         <h2 className="text-xl font-semibold mb-2">Recent Actions</h2>
         {profile.dates.length === 0 ? (
@@ -195,7 +140,8 @@ const UserDashboard = () => {
           <div className="space-y-4">
             {profile.dates
               .flatMap((dateData) => dateData.recentActions)
-              .reverse() // Reverse the actions array
+              .slice(-10)
+              .reverse()
               .map((action, index) => (
                 <div
                   key={index}

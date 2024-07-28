@@ -1,7 +1,7 @@
 // src/features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { login, logout, getCurrentUser } from "services/authService";
-import { handleError } from "utils/responseHandler";
+import { handleResponse } from "utils/responseHandler";
 
 const user = getCurrentUser();
 
@@ -22,7 +22,7 @@ export const loginUser = createAsyncThunk(
       return response;
     } catch (err) {
       console.log(err);
-      const handledError = handleError(err);
+      const handledError = handleResponse(err);
       return rejectWithValue(handledError.message);
     }
   }

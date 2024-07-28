@@ -1,11 +1,12 @@
 // src/pages/LoginPage.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../redux/auth/authSlice";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import QuoteCard from "utils/quoteCard";
+import { Toaster, toast } from "sonner";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -18,14 +19,22 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await dispatch(loginUser({ email, password })).unwrap();
+      toast.success("Sign in successful");
       navigate("/dashboard");
     } catch (err) {
       console.error("Failed to login:", err);
     }
   };
 
+  useEffect(() => {
+    if (status === "failed") {
+      toast.error(error || "Invalid user");
+    }
+  }, [status, error]);
+
   return (
     <div className="min-h-screen flex items-center bg-gray-100 justify-center bg-cover bg-center relative">
+      <Toaster />
       <div className="relative bg-background bg-opacity-90 shadow-md rounded-lg p-8 max-w-md w-full backdrop-blur-md">
         <div className="mb-6 text-center">
           <QuoteCard />
@@ -36,7 +45,6 @@ const LoginPage = () => {
             Welcome back! Please enter your details.
           </p>
         </div>
-        {status === "failed" && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
