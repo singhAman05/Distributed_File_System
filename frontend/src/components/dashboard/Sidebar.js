@@ -6,7 +6,7 @@ import {
   Upload,
   Download,
   House,
-  Search,
+  ScanSearch,
   Settings,
   LogOut,
   ChevronLeft,
@@ -87,13 +87,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                 : "text-gray-700 hover:bg-gray-200"
             }`}
           >
-            <House className="inline-block" />
+            <House className="inline-block mr-2" />
             <span
               className={`transition-opacity duration-300 delay-150 ${
                 isCollapsed ? "opacity-0" : "opacity-100"
               }`}
             >
-              {!isCollapsed && " Home"}
+              {!isCollapsed && "Home"}
             </span>
           </Link>
           <Link
@@ -104,13 +104,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                 : "text-gray-700 hover:bg-gray-200"
             }`}
           >
-            <Upload className="inline-block" />
+            <Upload className="inline-block mr-2" />
             <span
               className={`transition-opacity duration-300 delay-150 ${
                 isCollapsed ? "opacity-0" : "opacity-100"
               }`}
             >
-              {!isCollapsed && " Upload"}
+              {!isCollapsed && "Upload"}
             </span>
           </Link>
           <Link
@@ -121,13 +121,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                 : "text-gray-700 hover:bg-gray-200"
             }`}
           >
-            <Download className="inline-block" />
+            <Download className="inline-block mr-2" />
             <span
               className={`transition-opacity duration-300 delay-150 ${
                 isCollapsed ? "opacity-0" : "opacity-100"
               }`}
             >
-              {!isCollapsed && " Download"}
+              {!isCollapsed && "Download"}
             </span>
           </Link>
           <Link
@@ -138,13 +138,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                 : "text-gray-700 hover:bg-gray-200"
             }`}
           >
-            <Search className="inline-block" />
+            <ScanSearch className="inline-block mr-2" />
             <span
               className={`transition-opacity duration-300 delay-150 ${
                 isCollapsed ? "opacity-0" : "opacity-100"
               }`}
             >
-              {!isCollapsed && " Search"}
+              {!isCollapsed && "Search"}
             </span>
           </Link>
         </div>
@@ -162,13 +162,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
                   : "text-gray-700 hover:bg-gray-200"
               }`}
             >
-              <Settings className="inline-block" />
+              <Settings className="inline-block mr-2" />
               <span
                 className={`transition-opacity duration-300 delay-150 ${
                   isCollapsed ? "opacity-0" : "opacity-100"
                 }`}
               >
-                {!isCollapsed && " Settings"}
+                {!isCollapsed && "Settings"}
               </span>
             </div>
 
@@ -197,13 +197,13 @@ const Sidebar = ({ isCollapsed, toggleSidebar }) => {
             onClick={handleLogout}
             className="block py-2.5 px-4 rounded-r-md text-gray-700 hover:bg-gray-200 w-full text-left transition duration-200"
           >
-            <LogOut className="inline-block" />
+            <LogOut className="inline-block mr-2" />
             <span
               className={`transition-opacity duration-300 delay-150 ${
                 isCollapsed ? "opacity-0" : "opacity-100"
               }`}
             >
-              {!isCollapsed && " Logout"}
+              {!isCollapsed && "Logout"}
             </span>
           </button>
         </div>
