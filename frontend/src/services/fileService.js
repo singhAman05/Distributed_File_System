@@ -4,6 +4,7 @@ import { handleResponse } from "utils/responseHandler";
 import { BackendUrl, FileRoute } from "utils/config";
 
 const API_URL = `${BackendUrl}/${FileRoute}`;
+console.log(API_URL);
 
 const getToken = () => {
   const user = JSON.parse(localStorage.getItem("user"));

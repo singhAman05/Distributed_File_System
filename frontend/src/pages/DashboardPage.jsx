@@ -15,7 +15,7 @@ const DashboardPage = () => {
       <Toaster />
       <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
       <div
-        className={`flex-grow transition-all duration-300 p-4 ${
+        className={`flex-grow transition-all duration-300 ${
           isCollapsed ? "ml-16" : "ml-64"
         }`}
       >

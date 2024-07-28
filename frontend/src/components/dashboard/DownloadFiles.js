@@ -38,7 +38,7 @@ const DownloadFiles = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-2">
       <h2 className="text-2xl font-bold mb-4">Download Files</h2>
       <p className="text-gray-700 mb-4">
         Here are the top 20 most recent files uploaded by users from all over

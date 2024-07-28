@@ -7,7 +7,7 @@ import SearchFiles from "components/dashboard/SearchFiles";
 
 const DashboardContent = () => {
   return (
-    <div className="flex-1 p-10">
+    <div className="flex-1 p-6">
       <Routes>
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/upload" element={<UploadFiles />} />
