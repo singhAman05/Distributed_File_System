@@ -39,6 +39,11 @@ app.use("/api/profile/v1", profileRoutes);
 app.use("/api/nodes/v1", nodeRoutes);
 app.use("/api/system/v1", systemRoutes);
 
+// Server Test
+app.get("/", (req, res) => {
+  res.send("This is Server Route and I am Alive!!");
+});
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
