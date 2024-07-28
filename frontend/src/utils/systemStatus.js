@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import classNames from "classnames";
+import { BackendUrl, SystemRoute } from "./config";
 
 const SystemStatus = () => {
   const [totalNodes, setTotalNodes] = useState(0);
@@ -14,7 +15,7 @@ const SystemStatus = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/system/v1/system-status"
+          `${BackendUrl}/${SystemRoute}/system-status`
         );
         const data = response.data;
         console.log("Fetched system status data:", response); // Debugging log

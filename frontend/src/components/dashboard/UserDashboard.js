@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import FileIcon from "utils/fileIcon";
 import SystemStatus from "utils/systemStatus";
 import "react-circular-progressbar/dist/styles.css";
@@ -31,7 +33,73 @@ const UserDashboard = () => {
   }, []);
 
   if (profile === null) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-4 space-y-6">
+        <h1 className="text-2xl font-medium">
+          Welcome <Skeleton width={150} />
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="col-span-1 space-y-4">
+            <div className="bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
+              <h2 className="text-xl font-semibold mb-2">Your Stats</h2>
+              <hr className="border-gray-300 my-2" />
+              <div className="flex flex-col space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="text-lg font-medium">Downloads</div>
+                  <Skeleton width={30} />
+                </div>
+                <Skeleton height={16} />
+                <div className="flex justify-between items-center">
+                  <div className="text-lg font-medium">Uploads</div>
+                  <Skeleton width={30} />
+                </div>
+                <Skeleton height={16} />
+                <div className="mt-4">
+                  <div className="flex justify-between">
+                    <span className="font-medium">Total Downloads:</span>
+                    <Skeleton width={30} />
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-medium">Total Uploads:</span>
+                    <Skeleton width={30} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg mt-4">
+              <h2 className="text-xl font-semibold">System Status</h2>
+              <hr className="border-gray-300 my-2" />
+              <div className="mt-4">
+                <div className="text-sm text-gray-500 mb-2">
+                  Current Running Nodes: <Skeleton width={30} /> /{" "}
+                  <Skeleton width={30} />
+                </div>
+                <div className="w-full bg-gray-300 rounded-full h-4 mb-4">
+                  <Skeleton height={16} />
+                </div>
+                <div className="flex items-center">
+                  <Skeleton circle width={12} height={12} />
+                  <div className="ml-2 text-sm text-gray-500">
+                    System Status: <Skeleton width={80} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-2 bg-background p-4 shadow-md hover:shadow-lg duration-200 rounded-lg">
+            <h2 className="text-xl font-semibold">Upload/Download Activity</h2>
+            <hr className="border-gray-300 my-2" />
+            <Skeleton height={200} />
+          </div>
+        </div>
+
+        <div className="bg-transparent p-4">
+          <h2 className="text-xl font-semibold mb-2">Recent Actions</h2>
+          <Skeleton count={3} height={50} />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -58,7 +126,7 @@ const UserDashboard = () => {
               </div>
               <div className="w-full bg-gray-300 rounded-full h-4">
                 <div
-                  className="bg-[#9b19f5] h-4 rounded-full animate-pulse"
+                  className="bg-[#9b19f5] h-4 rounded-full"
                   style={{
                     width: `${Math.min(
                       (profile.dates.reduce(
@@ -84,7 +152,7 @@ const UserDashboard = () => {
               </div>
               <div className="w-full bg-gray-300 rounded-full h-4">
                 <div
-                  className="bg-[#ffa300] h-4 rounded-full animate-pulse"
+                  className="bg-[#ffa300] h-4 rounded-full"
                   style={{
                     width: `${Math.min(
                       (profile.dates.reduce(
