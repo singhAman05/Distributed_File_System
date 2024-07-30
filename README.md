@@ -1,6 +1,6 @@
 # Distributed File System (DFS) Project
 
-![DFS Logo](path/to/logo.png)
+![DFS Logo](frontend/public/D-F-S (3).png)
 
 ## Introduction
 
@@ -16,10 +16,10 @@ The **Distributed File System (DFS)** project is designed to facilitate efficien
 
 ## Technology Stack
 
-- **MongoDB Atlas**: A scalable and flexible NoSQL database for efficient data storage.
-- **React.js**: A powerful front-end library for building user interfaces.
-- **Node.js**: A JavaScript runtime for server-side programming.
-- **Express.js**: A web application framework for Node.js to build robust APIs.
+- **MongoDB Atlas**
+- **React.js**
+- **Node.js**
+- **Express.js**
 
 ## Problem Solved
 
@@ -64,3 +64,23 @@ To get started with the DFS project, follow these steps:
 
 Once the server is running, you can access the DFS project via the following URL:
 
+
+Visit the user dashboard, upload and download files, and use the fuzzy search feature to manage your files efficiently.
+
+## Screenshots
+
+## Contributing
+
+We welcome contributions to the DFS project. If you have any ideas or improvements, feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any inquiries or support, please contact [your-email@example.com](mailto:your-email@example.com).
+
+---
+
+*Developed by [Your Name](https://github.com/your-username)*
