@@ -1,6 +1,6 @@
 # Distributed File System (DFS) Project
 
-![DFS Logo](frontend/public/D-F-S (3).png)
+![DFS Logo](frontend/public/D-F-S%2(3).png)
 
 ## Introduction
 
@@ -49,7 +49,7 @@ To get started with the DFS project, follow these steps:
     npm install
     ```
 
-4. **Set up environment variables**: Create a `.env` file in the root directory and add the required environment variables:
+4. **Set up environment variables**: Create a `.env` file in the root directory of frontend and backend and add the required environment variables:
     ```env
     MONGODB_URI=your_mongodb_uri
     PORT=your_port_number
@@ -62,12 +62,9 @@ To get started with the DFS project, follow these steps:
 
 ## Usage
 
-Once the server is running, you can access the DFS project via the following URL:
-
+Our the server is running, you can access the DFS project via the following URL: [distributed-file-system.vercel.app](https://distributed-file-system.vercel.app/)
 
 Visit the user dashboard, upload and download files, and use the fuzzy search feature to manage your files efficiently.
-
-## Screenshots
 
 ## Contributing
 
@@ -79,8 +76,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or support, please contact [your-email@example.com](mailto:your-email@example.com).
+For any inquiries or support, please contact [amanshankarsingh05@gmail.com](mailto:amanshankarsingh05@gmail.com).
 
 ---
 
-*Developed by [Your Name](https://github.com/your-username)*
+*Developed by [dobby05]((https://github.com/singhAman05))*
