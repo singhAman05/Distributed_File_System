@@ -1,6 +1,6 @@
 # Distributed File System (DFS) Project
 
-![DFS Logo](frontend/public/D-F-S%2(3).png)
+![DFS Logo](frontend/public/logo.png)
 
 ## Introduction
 
@@ -72,7 +72,7 @@ We welcome contributions to the DFS project. If you have any ideas or improvemen
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.
 
 ## Contact
 
