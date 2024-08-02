@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { sendPasswordResetEmail } from "services/authService";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
-import Loader from "utils/Loader";
+import { toast } from "sonner";
+import { ClipLoader } from "react-spinners";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -14,9 +14,9 @@ const ForgotPasswordPage = () => {
     setLoading(true);
     try {
       const response = await sendPasswordResetEmail(email);
-      setMessage(response.message);
+      toast.success(response.message || "Recovery email sent successfully!");
     } catch (error) {
-      setMessage(error.response.data.message || "Server error");
+      toast.error(error.response?.data?.message || "Server error");
     } finally {
       setLoading(false);
     }
@@ -32,7 +32,6 @@ const ForgotPasswordPage = () => {
           Enter your email address and if it is present in our database, we will
           send a recovery email to the submitted email.
         </p>
-        {message && <p className="text-center text-red-600">{message}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
@@ -47,11 +46,11 @@ const ForgotPasswordPage = () => {
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-secondary text-white p-3 rounded-md"
+              className="w-full bg-primary hover:bg-secondary text-white p-3 rounded-md flex justify-center items-center"
               disabled={loading}
             >
               {loading ? (
-                <Loader size={6} color="text-white" />
+                <ClipLoader size={24} color={"#ffffff"} />
               ) : (
                 "Send Recovery Email"
               )}

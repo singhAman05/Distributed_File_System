@@ -6,24 +6,24 @@ import { toast } from "sonner";
 import FileIcon from "utils/fileIcon";
 import { SyncLoader, PropagateLoader, HashLoader } from "react-spinners";
 import { BackendUrl, SearchRoute } from "utils/config";
-import { downloadFile } from "services/fileService"; // Adjust the import path as necessary
+import { downloadFile } from "services/fileService";
 
 const SearchFiles = () => {
   const [query, setQuery] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState({});
+  const [searchPerformed, setSearchPerformed] = useState(false);
 
   const handleSearch = async () => {
     setLoading(true);
+    setSearchPerformed(true); // Mark that a search has been performed
     const loadingToastId = toast.loading("Searching your file...");
     try {
       const response = await axios.get(
         `${BackendUrl}/${SearchRoute}/search-files`,
         {
-          params: {
-            query: query,
-          },
+          params: { query },
         }
       );
       if (response.data.length === 0) {
@@ -53,6 +53,12 @@ const SearchFiles = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Search Files</h2>
@@ -62,6 +68,7 @@ const SearchFiles = () => {
           placeholder="Search files"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown} // Add the keyDown event handler
           className="flex-grow h-12"
         />
         <button
@@ -85,7 +92,7 @@ const SearchFiles = () => {
         <div className="flex justify-center items-center mt-4">
           <PropagateLoader size={15} color="#273469" />
         </div>
-      ) : files.length === 0 ? (
+      ) : searchPerformed && files.length === 0 ? (
         <div className="flex justify-center items-center mt-4">
           <p>We don't have your requested File</p>
         </div>

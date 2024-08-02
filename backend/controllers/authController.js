@@ -32,12 +32,12 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ user, token });
   } catch (err) {
-    if (err.message === "Username already taken") {
+    if (err.message === "Email already taken") {
       res.status(400).json({ error: err.message });
     } else {
       res
         .status(500)
-        .json({ error: "Error registering user", error_message: err });
+        .json({ error: "Error registering user", error_message: err.message });
     }
   }
 };

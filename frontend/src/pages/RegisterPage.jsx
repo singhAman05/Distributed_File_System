@@ -4,27 +4,33 @@ import { register } from "services/authService";
 import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import logo from "assets/bgImage.jpg";
+import { toast } from "sonner";
+import { ClipLoader } from "react-spinners";
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState(""); // New username state
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
+    setIsLoading(true);
     try {
-      const user = await register(username, email, password); // Pass username to register
+      const user = await register(username, email, password);
       localStorage.setItem("user", JSON.stringify(user));
+      toast.success("Registration successful!");
       navigate("/dashboard");
     } catch (err) {
-      setError("Registration failed");
+      toast.error(err.response?.data?.error || "Registration failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,7 +46,6 @@ const RegisterPage = () => {
             Please fill in the details to register.
           </p>
         </div>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
@@ -49,7 +54,7 @@ const RegisterPage = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              required // Make it required
+              required
             />
           </div>
           <div className="mb-4">
@@ -84,9 +89,14 @@ const RegisterPage = () => {
           </div>
           <Button
             type="submit"
-            className="w-full bg-primary text-white p-3 rounded-md"
+            className="w-full bg-primary text-white p-3 rounded-md flex justify-center items-center"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? (
+              <ClipLoader size={24} color={"#ffffff"} />
+            ) : (
+              "Register"
+            )}
           </Button>
         </form>
         <div className="mt-6 text-center">

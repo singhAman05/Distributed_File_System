@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Sidebar from "components/dashboard/Sidebar";
 import DashboardContent from "components/dashboard/DashboardContent";
-import { Toaster } from "sonner";
+import useAuth from "hooks/useAuth";
 
 const DashboardPage = () => {
+  useAuth(); // Add the useAuth hook to check authentication
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleSidebar = () => {
@@ -12,7 +13,6 @@ const DashboardPage = () => {
 
   return (
     <div className="flex">
-      <Toaster />
       <Sidebar isCollapsed={isCollapsed} toggleSidebar={toggleSidebar} />
       <div
         className={`flex-grow transition-all duration-300 ${

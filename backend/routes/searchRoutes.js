@@ -11,7 +11,7 @@ router.get("/search-files", async (req, res) => {
   }
 
   try {
-    const files = await File.find({}); // Fetch all files
+    const files = await File.find({}).populate("uploaded_by", "username");
     const fuse = new Fuse(files, {
       keys: ["filename"],
       threshold: 0.3, // Adjust the threshold for fuzziness
