@@ -27,6 +27,15 @@ const DynamicTitle = () => {
       case "/forgot-password":
         document.title = "Forgot Password";
         break;
+      case "/upload":
+        document.title = "Upload";
+        break;
+      case "/download":
+        document.title = "Download";
+        break;
+      case "/search":
+        document.title = "Search";
+        break;
       case "/reset-password":
         document.title = "Reset Password";
         break;
