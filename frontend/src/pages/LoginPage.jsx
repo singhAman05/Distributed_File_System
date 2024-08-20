@@ -1,4 +1,3 @@
-// src/pages/LoginPage.js
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -7,10 +6,13 @@ import { Input } from "components/ui/input";
 import { Button } from "components/ui/button";
 import QuoteCard from "utils/quoteCard";
 import { Toaster, toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+import { ClipLoader } from "react-spinners"; // Import the spinner
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { status, error } = useSelector((state) => state.auth);
@@ -55,20 +57,35 @@ const LoginPage = () => {
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-6 relative">
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900"
+            >
+              {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+            </button>
           </div>
           <Button
             type="submit"
-            className="w-full bg-primary text-white p-3 rounded-md"
+            className="w-full bg-primary text-white p-3 rounded-md flex justify-center items-center"
+            disabled={status === "loading"} // Disable button when loading
           >
-            {status === "loading" ? "Signing In..." : "Sign In"}
+            {status === "loading" ? (
+              <>
+                Signing In...
+                <ClipLoader size={20} color="#ffffff" className="ml-2" />
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
           <div className="mt-6 text-center">
             <Link to="/forgot-password">

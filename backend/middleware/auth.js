@@ -1,5 +1,4 @@
 // auth.js (middleware)
-const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { verifyToken } = require("../config/auth");
 
