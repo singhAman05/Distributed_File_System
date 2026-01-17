@@ -1,5 +1,5 @@
 # Distributed File System (DFS) Project
-
+!!! ALERT DFS site is not working currently will fix the issue soon... !!!
 ![DFS Logo](frontend/public/logo.png)
 
 ## Introduction
